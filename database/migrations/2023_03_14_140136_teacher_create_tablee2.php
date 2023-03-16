@@ -10,11 +10,9 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {   Schema::dropIfExists('teachers');
-        Schema::create('teachers', function (Blueprint $table) {
-            $table->id();
-            $table->string('first_name');
-            $table->string('surname');
+    {   
+        Schema::table('teachers', function (Blueprint $table) {
+            $table->renameColumn('last_name', 'surname');
         });
     }
 
