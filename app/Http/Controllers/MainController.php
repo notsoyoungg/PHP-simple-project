@@ -7,6 +7,8 @@ use App\Models\Student;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 
 class MainController extends Controller
 {
@@ -22,13 +24,23 @@ class MainController extends Controller
     public function get_lesson($class, $subject) {
         $students = DB::table('students')->where('class', '=', $class)->get();
         $selected_subject = DB::table('subjects')->where('id', '=', $subject)->get()[0];
-        $lessons = Lessons::where('subject_id', '=', $subject)->get();
-        $lessons_dates = Lessons::select('created_at')->where('subject_id', '=', $subject)->distinct('created_at')->get();
-        // dd($lessons_dates);
-        return view('lesson', ['students' => $students,
-                               'subject' => $selected_subject,
-                               'lessons' => $lessons,
-                               'lessons_dates' => $lessons_dates]);
+        $lessons_dates = DB::table('lessons')
+            ->join('students', 'lessons.student_id', '=', 'students.id')
+            ->where('subject_id', $subject)
+            ->where('students.class', $class)
+            ->select('created_at')
+            ->distinct('created_at')
+            ->get();
+        $lessons = DB::table('lessons')
+            ->join('students', 'lessons.student_id', '=', 'students.id')
+            ->where('subject_id', $subject)
+            ->where('students.class', $class)
+            ->select('lessons.*', 'students.first_name', 'students.last_name')
+            ->get();
+        return view('lesson', ['subject' => $selected_subject,
+                               'students' => $students,
+                               'lessons_dates' => $lessons_dates,
+                               'lessons' => $lessons]);
     }
     public function end_lesson(Request $request) {
         $request->validate([

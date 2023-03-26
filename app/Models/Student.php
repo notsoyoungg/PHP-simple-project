@@ -9,6 +9,6 @@ class Student extends Model
 {
     use HasFactory;
     public function lessons() {
-        return $this->hasMany('Lessons');
+        return $this->hasMany(Lessons::class);
     }
 }

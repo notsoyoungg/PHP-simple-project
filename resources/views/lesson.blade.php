@@ -10,15 +10,13 @@
     <tr>
       <th scope="col">Учащийся</th>
       @foreach ($lessons_dates as $date)
-      @if ($date->created_at)
-      <th scope="col">{{ $date->created_at->format('d-m-Y') }}</th>
-      @endif
+      <th scope="col">{{ Carbon\Carbon::parse($date->created_at)->format('d-m-Y') }}</th>
       @endforeach
       <th scope="col"><input class="form-control  w-25" type="date" name="date"></th>
     </tr>
   </thead>
   <tbody>
-    @foreach($students as $child)
+  @foreach($students as $child)
     <tr>
       <input type="hidden" name="child_{{ $child->id }}" value="{{ $child->id }}">
       <td>{{ $child->first_name }}</td>

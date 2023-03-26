@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Lessons extends Model
 {
     use HasFactory;
-    public function child() {
+    protected $casts = ['created_at'=>'datetime'];
+    public function student() {
         return $this->belongsTo(Student::class);
     }
 }
