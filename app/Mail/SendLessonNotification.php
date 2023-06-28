@@ -14,7 +14,7 @@ class SendLessonNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $lesson;
+    protected $lesson;
 
     /**
      * Create a new message instance.
