@@ -6,15 +6,12 @@ use App\Models\Lessons;
 use App\Models\Student;
 use App\Models\Subject;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 
 class MainController extends Controller
 {
     public function index() {
         $subjects = new Subject();
-        
         return view('index2', ['subjects' => $subjects->all()]);
     }
     public function get_class($class) {
@@ -22,31 +19,27 @@ class MainController extends Controller
         return view('index', ['subjects' => $subjects, 'class' => $class]);
     }
     public function get_lesson($class, $subject) {
-        $students = DB::table('students')->where('class', '=', $class)->get();
-        $selected_subject = DB::table('subjects')->where('id', '=', $subject)->get()[0];
-        $lessons_dates = DB::table('lessons')
-            ->join('students', 'lessons.student_id', '=', 'students.id')
-            ->where('subject_id', $subject)
-            ->where('students.class', $class)
-            ->select('created_at')
-            ->distinct('created_at')
-            ->get();
-        $lessons = DB::table('lessons')
-            ->join('students', 'lessons.student_id', '=', 'students.id')
-            ->where('subject_id', $subject)
-            ->where('students.class', $class)
-            ->select('lessons.*', 'students.first_name', 'students.last_name')
-            ->get();
-        return view('lesson', ['subject' => $selected_subject,
+//        почему этот код возвращает "select * from "students" where "students"."id" is null" ?????
+//        $something = new Lessons();
+//        dd($something->student()->toSql());
+        $lessons = Lessons::whereHas('student', function ($query) use ($class) {
+            $query->where('class', $class);
+        })->whereSubjectId($subject)->get();
+        $lessonsDates = Lessons::whereHas('student', function ($query) use ($class) {
+            $query->where('class', $class);
+        })->whereSubjectId($subject)->distinct('created_at')->get();
+        $students = Student::whereClass($class)->get();
+        $subject = Subject::whereId($subject)->first();
+        return view('lesson', ['subject' => $subject,
                                'students' => $students,
-                               'lessons_dates' => $lessons_dates,
-                               'lessons' => $lessons]);
+                               'lessons_dates' => $lessonsDates,
+                               'lessons' => $lessons,
+                               'class' => $class]);
     }
     public function end_lesson(Request $request) {
         $request->validate([
             'date' => 'required',
         ]);
-        $lesson = new Lessons();
         $subject_id = $request->input('subj_id');
         $date = $request->input('date');
         $vars = $request->input();
@@ -54,16 +47,18 @@ class MainController extends Controller
         unset($vars['_token']);
         unset($vars['date']);
         foreach ($vars as $key => $value) {
-            $lesson = new Lessons();
-            $lesson->subject_id = $subject_id;
-            $lesson->student_id = (int) explode("_", $key)[1];
+            $student_id = (int) explode("_", $key)[1];
             if (is_null($value)) {
-                $lesson->rating = '';
+                $rating = '';
             } else {
-                $lesson->rating = $value;
+                $rating = $value;
             }
-            $lesson->created_at = $date;
-            $lesson->save();
+            Lessons::create([
+                'subject_id' => $subject_id,
+                'student_id' => $student_id,
+                'rating' => $rating,
+                'created_at' => $date
+            ]);
         }
         return back()->withInput();
     }

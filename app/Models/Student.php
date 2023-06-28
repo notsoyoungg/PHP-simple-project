@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
-    use HasFactory;
+//    protected $primaryKey = 'student_id';
     public function lessons() {
-        return $this->hasMany(Lessons::class);
+        return $this->hasMany(Lessons::class, 'student_id');
     }
 }

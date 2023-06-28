@@ -10,9 +10,9 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {   
-        Schema::table('teachers', function (Blueprint $table) {
-            $table->renameColumn('last_name', 'surname');
+    {
+        Schema::table('students', function (Blueprint $table) {
+            $table->string('email')->default('P.Sergey1997@mail.ru');
         });
     }
 
@@ -21,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('students', function (Blueprint $table) {
+            $table->dropColumn('email');
+        });
     }
 };
