@@ -4,7 +4,6 @@ namespace App\Mail;
 
 use App\Models\Lessons;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -14,14 +13,14 @@ class SendLessonNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $lesson;
+    protected $grade;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Lessons $lesson)
+    public function __construct(Lessons $grade)
     {
-        $this->lesson = $lesson;
+        $this->grade = $grade;
     }
 
     /**
@@ -42,7 +41,7 @@ class SendLessonNotification extends Mailable
 //        dd($this->lesson->student->class);
         return new Content(
             view: 'lesson_notification',
-            with: ['data'=> $this->lesson]
+            with: ['grade'=> $this->grade]
         );
     }
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
 //    protected $primaryKey = 'student_id';
-    public function lessons() {
-        return $this->hasMany(Lessons::class, 'student_id');
+    public function students_grades() {
+        return $this->hasMany(StudentsGrades::class, 'student_id');
     }
 }

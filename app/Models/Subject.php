@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subject extends Model
 {
-    use HasFactory;
     public function teacher() {
         return $this->belongsTo(Teacher::class);
     }
-    public function lessons() {
-        return $this->hasMany(Lessons::class);
+    public function students_grades() {
+        return $this->hasMany(StudentsGrades::class);
     }
 }

@@ -1,8 +1,6 @@
 @extends('base')
 
 @section('content')
-{{--    <h1>{{ request()->route('class') }}</h1>--}}
-{{--    <h1>{{ request()->route('subject') }}</h1>--}}
 <h1>{{ $subject->name }}</h1>
 <form action="{{ route('create_lesson', ['class' => $class, 'subject' => $subject->id]) }}" method="post">
     <input type="hidden" name="subj_id" value="{{ $subject->id }}">
@@ -11,27 +9,25 @@
         <thead>
             <tr>
                 <th scope="col">Учащийся</th>
-                    @foreach ($lessons_dates as $date)
-                        @if($date->student->class == $class)
-                            <th scope="col">{{ $date->created_at->format('d-m-Y') }}</th>
+                    @foreach ($lessons_dates as $lesson_date)
+                        @if($lesson_date->student->class == $class)
+                            <th scope="col">{{ $lesson_date->created_at->format('d-m-Y') }}</th>
                         @endif
                     @endforeach
-                <th scope="col"><input class="form-control  w-25" type="date" name="date"></th>
+                <th scope="col"><input class="form-control  w-25" type="date" name="lesson_date"></th>
             </tr>
         </thead>
         <tbody>
-            @foreach($students as $child)
+            @foreach($students as $student)
                 <tr>
-                    <input type="hidden" name="child_{{ $child->id }}" value="{{ $child->id }}">
-                    <td>{{ $child->first_name }}</td>
-                    @foreach ($lessons_dates as $date)
-                        @foreach ($lessons as $lesson)
-                            @if ($child->id === $lesson->student_id and $lesson->created_at == $date->created_at)
-                                <td>{{ $lesson->rating }}</td>
+                    <input type="hidden" name="{{ $student->id }}" value="{{ $student->id }}">
+                    <td>{{ $student->first_name }}</td>
+                        @foreach ($grades as $grade)
+                            @if ($student->id === $grade->student_id)
+                                <td>{{ $grade->rating }}</td>
                             @endif
                         @endforeach
-                    @endforeach
-                    <td><input class="form-control  w-25" type="text" name="child_{{ $child->id }}"></td>
+                    <td><input class="form-control  w-25" type="text" name="{{ $student->id }}"></td>
                 </tr>
             @endforeach
         </tbody>
