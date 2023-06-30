@@ -32,19 +32,19 @@
             </a>
         </li>
         <li>
-            <a href="/6А" class="nav-link text-dark">
+            <a href="/1" class="nav-link text-dark">
             <svg class="bi me-2 text-dark" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
             6А класс
             </a>
         </li>
         <li>
-            <a href="/6Б" class="nav-link text-dark">
+            <a href="/2" class="nav-link text-dark">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
             6Б класс
             </a>
         </li>
         <li>
-            <a href="/6В" class="nav-link text-dark">
+            <a href="/3" class="nav-link text-dark">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
             6В класс
             </a>

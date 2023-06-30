@@ -2,38 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MyValidationRequest;
-use App\Models\StudentsGrades;
+use App\Models\Grade;
+use App\Models\Lesson;
 use App\Models\Student;
 use App\Models\Subject;
+use App\Services\GradeService;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 
-class MainController extends BaseController
+class MainController extends Controller
 {
     public function index() {
-        return view('index2', ['subjects' => Subject::all()]);
+        return view('index', ['subjects' => Subject::all()]);
     }
-    public function get_class($class) {
+    public function get_class($groupId) {
         $subjects = Subject::with('teacher')->get();
-        return view('index', ['subjects' => $subjects, 'class' => $class]);
+        return view('class', ['subjects' => $subjects, 'group_id' => $groupId]);
     }
-    public function get_lesson($class, $subject_id) {
-        $subject = Subject::whereId($subject_id)->first();
-        $students = Student::whereClass($class)->get();
-        $lessonsDates = $this->grades->getWithUniqueDates($class, $subject_id);
-        $grades = $this->grades->getByClassAndSubjectId($class, $subject_id);
+    public function get_lesson($groupId, $subjectId) {
+        $subject = Subject::whereId($subjectId)->first();
+        $students = Student::whereGroupId($groupId)->get();;
+        $lessons = Lesson::whereSubjectId($subjectId)->whereGroupId($groupId)->get();
+        $grades = Grade::whereHas('lesson', function ($query) use ($subjectId, $groupId) {
+            $query->whereSubjectId($subjectId)->whereGroupId($groupId);
+        })->get();
         return view('lesson', ['subject' => $subject,
                                     'students' => $students,
-                                    'lessons_dates' => $lessonsDates,
+                                    'lessons' => $lessons,
                                     'grades' => $grades,
-                                    'class' => $class]);
+                                    'groupId' => $groupId]);
     }
-    public function end_lesson(MyValidationRequest $request) {
-        $grades = $this->service->handleData($request);
-        foreach ($grades as $grade) {
-            StudentsGrades::create($grade);
-        }
+    public function end_lesson(Request $request) {
+        $service = new GradeService();
+        $service->handleData($request);
         return back()->withInput();
     }
 }

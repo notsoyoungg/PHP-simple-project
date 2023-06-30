@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Lessons;
+use App\Models\Grade;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -18,7 +18,7 @@ class SendLessonNotification extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(Lessons $grade)
+    public function __construct(Grade $grade)
     {
         $this->grade = $grade;
     }
@@ -40,7 +40,7 @@ class SendLessonNotification extends Mailable
     {
 //        dd($this->lesson->student->class);
         return new Content(
-            view: 'lesson_notification',
+            view: 'lesson-notification',
             with: ['grade'=> $this->grade]
         );
     }

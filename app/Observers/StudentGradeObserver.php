@@ -3,14 +3,14 @@
 namespace App\Observers;
 
 use App\Jobs\SendLessonResults;
-use App\Models\StudentsGrades;
+use App\Models\Grade;
 
-class StudentsGradesObserver
+class StudentGradeObserver
 {
     /**
      * Handle the Lessons "created" event.
      */
-    public function created(StudentsGrades $grade): void
+    public function created(Grade $grade): void
     {
         SendLessonResults::dispatch($grade);
     }

@@ -2,19 +2,18 @@
 
 @section('content')
 <h1>{{ $subject->name }}</h1>
-<form action="{{ route('create_lesson', ['class' => $class, 'subject' => $subject->id]) }}" method="post">
-    <input type="hidden" name="subj_id" value="{{ $subject->id }}">
+<form action="{{ route('create_lesson', ['class' => $groupId, 'subject' => $subject->id]) }}" method="post">
+    <input type="hidden" name="subjId" value="{{ $subject->id }}">
+    <input type="hidden" name="groupId" value="{{ $groupId }}">
     @csrf
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">Учащийся</th>
-                    @foreach ($lessons_dates as $lesson_date)
-                        @if($lesson_date->student->class == $class)
-                            <th scope="col">{{ $lesson_date->created_at->format('d-m-Y') }}</th>
-                        @endif
+                    @foreach ($lessons as $lesson)
+                        <th scope="col">{{ $lesson->created_at->format('d-m-Y') }}</th>
                     @endforeach
-                <th scope="col"><input class="form-control  w-25" type="date" name="lesson_date"></th>
+                <th scope="col">Оценка</th>
             </tr>
         </thead>
         <tbody>
@@ -24,7 +23,7 @@
                     <td>{{ $student->first_name }}</td>
                         @foreach ($grades as $grade)
                             @if ($student->id === $grade->student_id)
-                                <td>{{ $grade->rating }}</td>
+                                <td>{{ $grade->grade }}</td>
                             @endif
                         @endforeach
                     <td><input class="form-control  w-25" type="text" name="{{ $student->id }}"></td>

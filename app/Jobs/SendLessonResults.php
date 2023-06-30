@@ -14,14 +14,14 @@ class SendLessonResults implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $lesson;
+    protected $grade;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($lesson)
+    public function __construct($grade)
     {
-        $this->lesson = $lesson;
+        $this->grade = $grade;
     }
 
     /**
@@ -29,6 +29,6 @@ class SendLessonResults implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->lesson->student->email)->send(new SendLessonNotification($this->lesson));
+        Mail::to($this->grade->student->email)->send(new SendLessonNotification($this->grade));
     }
 }
