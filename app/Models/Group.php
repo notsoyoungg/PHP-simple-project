@@ -14,3 +14,4 @@ class Group extends Model
         return $this->hasMany(Student::class);
     }
 }
+

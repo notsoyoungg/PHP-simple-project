@@ -14,24 +14,20 @@ use Illuminate\Routing\Controller;
 class MainController extends Controller
 {
     public function index() {
-        return view('index', ['subjects' => Subject::all()]);
+        return view('index');
     }
-    public function get_class($groupId) {
+    public function get_class($studentsGroupId) {
         $subjects = Subject::with('teacher')->get();
-        return view('class', ['subjects' => $subjects, 'group_id' => $groupId]);
+        return view('class', ['subjects' => $subjects, 'group_id' => $studentsGroupId]);
     }
-    public function get_lesson($groupId, $subjectId) {
+    public function get_lesson($studentsGroupId, $subjectId) {
         $subject = Subject::whereId($subjectId)->first();
-        $students = Student::whereGroupId($groupId)->get();;
-        $lessons = Lesson::whereSubjectId($subjectId)->whereGroupId($groupId)->get();
-        $grades = Grade::whereHas('lesson', function ($query) use ($subjectId, $groupId) {
-            $query->whereSubjectId($subjectId)->whereGroupId($groupId);
-        })->get();
+        $students = Student::whereGroupId($studentsGroupId)->get();
+        $lessons = Lesson::whereSubjectId($subjectId)->whereGroupId($studentsGroupId)->get();
+        dump($lessons);
         return view('lesson', ['subject' => $subject,
                                     'students' => $students,
-                                    'lessons' => $lessons,
-                                    'grades' => $grades,
-                                    'groupId' => $groupId]);
+                                    'lessons' => $lessons]);
     }
     public function end_lesson(Request $request) {
         $service = new GradeService();
