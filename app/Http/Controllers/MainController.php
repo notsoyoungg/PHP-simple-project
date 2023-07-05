@@ -17,14 +17,13 @@ class MainController extends Controller
         return view('index');
     }
     public function get_class($studentsGroupId) {
-        $subjects = Subject::with('teacher')->get();
+        $subjects = Subject::all();
         return view('class', ['subjects' => $subjects, 'group_id' => $studentsGroupId]);
     }
     public function get_lesson($studentsGroupId, $subjectId) {
         $subject = Subject::whereId($subjectId)->first();
         $students = Student::whereGroupId($studentsGroupId)->get();
         $lessons = Lesson::whereSubjectId($subjectId)->whereGroupId($studentsGroupId)->get();
-        dump($lessons);
         return view('lesson', ['subject' => $subject,
                                     'students' => $students,
                                     'lessons' => $lessons]);

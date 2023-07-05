@@ -2,8 +2,8 @@
 
 @section('content')
 <h1>{{ $subject->name }}</h1>
-<form action="{{ route('create_lesson', ['class' => request()->route('class'), 'subject' => request()->route('subject')]) }}" method="post">
-    <input type="hidden" name="subjId" value="{{ request()->route('subject') }}">
+<form action="{{ route('create_lesson', ['class' => request()->route('class'), 'subject' => $subject->id]) }}" method="post">
+    <input type="hidden" name="subjId" value="{{ $subject->id }}">
     <input type="hidden" name="groupId" value="{{ request()->route('class') }}">
     @csrf
     <table class="table">
