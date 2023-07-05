@@ -18,9 +18,9 @@ class MainController extends Controller
     }
     public function get_class($studentsGroupId) {
         $subjects = Subject::all();
-        return view('class', ['subjects' => $subjects, 'group_id' => $studentsGroupId]);
+        return view('class', ['subjects' => $subjects, 'students_group_id' => $studentsGroupId]);
     }
-    public function get_lesson($studentsGroupId, $subjectId) {
+    public function start_lesson($studentsGroupId, $subjectId) {
         $subject = Subject::whereId($subjectId)->first();
         $students = Student::whereGroupId($studentsGroupId)->get();
         $lessons = Lesson::whereSubjectId($subjectId)->whereGroupId($studentsGroupId)->get();

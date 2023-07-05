@@ -15,14 +15,6 @@ use App\Http\Controllers\MainController;
 */
 
 Route::get('/', [MainController::class, 'index']);
-Route::get('/{class}', [MainController::class, 'get_class']);
-Route::get('/{class}/{subject}', [MainController::class, 'get_lesson'])->name('new_lesson');
-Route::post('/{class}/{subject}', [MainController::class, 'end_lesson'])->name('create_lesson');
-
-// Route::get('/main', function () {
-//     return view('index');
-// });
-
-// Route::get('/user/{id}', function ($id) {
-//     return view('index');
-// });
+Route::get('/{students_group_id}', [MainController::class, 'get_class']);
+Route::get('/{students_group_id}/{subject_id}', [MainController::class, 'start_lesson'])->name('start_lesson');
+Route::post('/{students_group_id}/{subject_id}', [MainController::class, 'end_lesson'])->name('end_lesson');

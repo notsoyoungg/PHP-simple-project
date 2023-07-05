@@ -2,9 +2,9 @@
 
 @section('content')
 <h1>{{ $subject->name }}</h1>
-<form action="{{ route('create_lesson', ['class' => request()->route('class'), 'subject' => $subject->id]) }}" method="post">
+<form action="{{ route('start_lesson', ['students_group_id' => request()->route('students_group_id'), 'subject_id' => $subject->id]) }}" method="post">
     <input type="hidden" name="subjId" value="{{ $subject->id }}">
-    <input type="hidden" name="groupId" value="{{ request()->route('class') }}">
+    <input type="hidden" name="groupId" value="{{ request()->route('students_group_id') }}">
     @csrf
     <table class="table">
         <thead>
@@ -22,7 +22,9 @@
                     <input type="hidden" name="{{ $student->id }}" value="{{ $student->id }}">
                     <td>{{ $student->first_name }}</td>
                         @foreach ($student->grades as $grade)
-                            <td>{{ $grade->grade }}</td>
+                            @if($grade->lesson->subject_id == $subject->id)
+                                <td>{{ $grade->grade }}</td>
+                            @endif
                         @endforeach
                     <td><input class="form-control  w-25" type="text" name="{{ $student->id }}"></td>
                 </tr>
