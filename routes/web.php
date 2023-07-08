@@ -15,6 +15,6 @@ use App\Http\Controllers\MainController;
 */
 
 Route::get('/', [MainController::class, 'index']);
-Route::get('/{students_group_id}', [MainController::class, 'get_class']);
-Route::get('/{students_group_id}/{subject_id}', [MainController::class, 'start_lesson'])->name('start_lesson');
-Route::post('/{students_group_id}/{subject_id}', [MainController::class, 'end_lesson'])->name('end_lesson');
+Route::get('/{students_group_id}', [MainController::class, 'getClass'])->name('get_class');
+Route::get('/{students_group_id}/{subject_id}', [MainController::class, 'startLesson'])->name('start_lesson');
+Route::post('/{students_group_id}/{subject_id}', [MainController::class, 'endLesson'])->name('end_lesson');

@@ -16,11 +16,11 @@ class MainController extends Controller
     public function index() {
         return view('index');
     }
-    public function get_class($studentsGroupId) {
+    public function getClass() {
         $subjects = Subject::all();
-        return view('class', ['subjects' => $subjects, 'students_group_id' => $studentsGroupId]);
+        return view('class', ['subjects' => $subjects]);
     }
-    public function start_lesson($studentsGroupId, $subjectId) {
+    public function startLesson($studentsGroupId, $subjectId) {
         $subject = Subject::whereId($subjectId)->first();
         $students = Student::whereGroupId($studentsGroupId)->get();
         $lessons = Lesson::whereSubjectId($subjectId)->whereGroupId($studentsGroupId)->get();
@@ -28,7 +28,7 @@ class MainController extends Controller
                                     'students' => $students,
                                     'lessons' => $lessons]);
     }
-    public function end_lesson(Request $request) {
+    public function endLesson(Request $request) {
         $service = new GradeService();
         $service->handleData($request);
         return back()->withInput();
